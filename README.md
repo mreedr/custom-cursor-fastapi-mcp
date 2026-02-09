@@ -1,4 +1,4 @@
-# FastAPI MCP String Manipulation
+# FastAPI MCP for String Manipulation
 
 Purpose of this project:
 
