@@ -1,4 +1,5 @@
 import os
+import secrets
 
 from fastapi import Depends, FastAPI, HTTPException, status
 from pydantic import BaseModel
@@ -31,21 +32,30 @@ def login(payload: LoginRequest):
 @app.post("/api/string-manip/reverse", operation_id="reverse_given_string")
 def reverse_string(
     payload: ReverseStringRequest,
-    user: str = Depends(get_current_user),
 ):
     return {"reversed": payload.text[::-1]}
 
 
 @app.get("/api/example-strings", operation_id="example_string")
-async def get_example_strings(user: str = Depends(get_current_user)):
+def get_example_strings(user: str = Depends(get_current_user)):
     return {"example_strings": ["Hello, world!", "FastAPI is awesome", "Python is great"]}
+
+
+@app.get("/api/crypto/ethereum/address", operation_id="random_eth_address")
+def random_eth_address():
+    return {"address": f"0x{secrets.token_hex(20)}"}
 
 
 mcp = FastApiMCP(
     app,
     name="String Manipulation MCP",
     description="MCP server for the string manipulation API",
-    include_operations=["login", "example_string", "reverse_given_string"]
+    include_operations=[
+        "login",
+        "example_string",
+        "reverse_given_string",
+        "random_eth_address",
+    ]
 )
 
 
